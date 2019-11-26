@@ -128,3 +128,37 @@ metrics(x_2, truth = dvote, estimate = pred_dvote) %>%
 
 ```
 
+```{r}
+
+logistic_reg() %>% 
+  set_engine("glm") %>%
+  fit(data = clean, dvote ~ gender + party + state + office) %>% 
+  predict(new_data = clean) %>% 
+  bind_cols(clean) %>% 
+  metrics(truth = dvote, estimate = .pred_class) %>% 
+  gt() %>% 
+  tab_header("Model 2 Evaluation on All Data")
+
+# initial_split()
+# vfold_cv()
+
+```
+
+```{r}
+
+x_split <- initial_split(clean, prop = 0.01)
+
+sample_data <- training(x_split)
+
+logistic_reg() %>% 
+  set_engine("glm") %>%
+  fit(data = sample_data, dvote ~ gender + party + state + office) %>% 
+  predict(new_data = sample_data) %>% 
+  bind_cols(sample_data) %>% 
+  metrics(truth = dvote, estimate = .pred_class) %>% 
+  gt() %>% 
+  tab_header("Model 2 Evaluation on All Data")
+
+```
+
+
